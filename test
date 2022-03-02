@@ -1,0 +1,60 @@
+class Solution:
+
+
+    def __init__(self, inputString):
+        if self.isStr(inputString) != True:
+            return None
+        self.inputString = inputString
+        self.output = self.__stringToIntArray(self.inputString)
+        self.finalResult = self.__intArrayToPercentage(self.output)
+
+        if (self.finalResult*10 >=80):
+            print (f"\"{self.inputString}\" has a {self.finalResult*10}% good match") #will print 'good match' if the match is greater than or equal to 80%
+        else:
+            print(f"\"{self.inputString}\" has a {self.finalResult*10}% match")
+
+    def isStr(self, inputString):
+        if isinstance(inputString, str) != True: #if the input valid is incorrect
+            print(f"The input type that you have entered is invalid. Please try again. Input type entered = {type(inputString)} : type required = <class 'str'>")
+            return False
+        return True
+
+    def __intArrayToPercentage(self, intArray):
+
+        while len(intArray) >= 2:
+            left = 0
+            rightFixed = len(intArray)
+            right = len(intArray)-1
+            while left < right:
+                combo = intArray[left] + intArray[right]
+                for char in str(combo):
+                    intArray.append(int(char))
+                left += 1
+                right -= 1
+            if left == right:
+                intArray.append(intArray[left])
+            intArray = intArray[rightFixed:]
+        ouput = intArray.pop()
+        return ouput
+
+
+    def __stringToIntArray(self, pattern):
+        if self.isStr(pattern) != True:
+            return None
+        pattern = pattern.replace(" ", "") #remove white space
+        pattern = pattern.lower() # convert into lower case
+        counted = {} # No hash sets in python so using hash map
+        i = 0
+
+        while len(pattern) > i:
+            if pattern[i] not in counted.keys():
+                counted[pattern[i]] = 1
+            else:
+                counted[pattern[i]] += 1
+            i+=1
+        return list(counted.values())
+
+
+if __name__ == "__main__": #execute only if the file was run directly
+    userInput = input("Please enter two names:")
+    Solution(userInput) #point of execution
